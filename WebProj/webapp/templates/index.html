@@ -1,0 +1,91 @@
+<html>
+{%load leaflet_tags %}
+    <head>
+        <link rel="stylesheet" href="//unpkg.com/leaflet/dist/leaflet.css"/>
+        
+
+        <!-- This jquery library is importnat. With this you can do the below "getJSON" jQuery  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js"></script>
+
+        {% leaflet_js %}
+        {% leaflet_css %}
+    </head>
+    <body>
+        
+        <h1>Earthquakes Between August 14-20 2022</h1>
+    
+        <div id="map" style="width: 1920px; height: 1080px;"></div>
+
+        <script type="text/javascript">
+
+            var map = L.map('map').setView([55.67, 12.55], 3);
+            var tile = L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+        
+            // REGULAR MARKERS
+            // Reference: https://www.savaslabs.com/blog/mapping-external-geojson-data
+        
+            // function addDataToMap(data, map) {
+
+            //     var dataLayer = L.geoJson(data, {
+
+            //         //// Give each feature a popup
+            //         onEachFeature: function(feature, layer) {
+
+            //             var popupText = "Magnitude: " + feature.properties.magnitude 
+            //             + "<br>Location: " + feature.properties.country
+            //             ;
+            //             layer.bindPopup(popupText); }
+            //         });
+
+            //     dataLayer.addTo(map);
+            // }
+
+            // var ourdata = '{% url "data" %}';
+
+            // $.getJSON(ourdata, function(data) { addDataToMap(data, map); });
+
+            // CIRCLE MARKERS 
+            function addDataToMap(mydata, map) {
+
+                var dataLayer = L.geoJson(mydata, {
+
+                    // Convert default markers to circle
+                    pointToLayer: function (feature, latlng) {
+
+                        // Observe how you define the radius sixe dependent on magnitude data
+                        var geojsonMarkerOptions = {
+                            radius: feature.properties.magnitude * 3,
+                            fillColor: "#ff7800",
+                            color: "#000",
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.6
+                        };
+                        return L.circleMarker(latlng, geojsonMarkerOptions);
+                    },
+
+                    // Give each feature a popup
+                    onEachFeature: function(feature, layer) {
+
+                        var popupText = "Magnitude: " + feature.properties.magnitude + "<br>Location: " + feature.properties.country ;
+
+                        layer.bindPopup(popupText); },
+
+                    });
+
+                dataLayer.addTo(map);
+            }
+
+            var ourdata = '{% url "mydata" %}';
+
+            $.getJSON(ourdata, function(mydata) { addDataToMap(mydata, map); });
+
+
+        </script>
+
+
+
+    </body>
+</html>

@@ -1,0 +1,160 @@
+------ WORKING ------
+<html>
+    <head>
+        <link rel="stylesheet" href="//unpkg.com/leaflet/dist/leaflet.css"/>
+        <script src="//unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    </head>
+    <body><h1>Hurra!</h1>
+        {{ markers|json_script:"markers-data" }}
+        <div id="m" style="width: 1920px; height: 1080px;"></div>
+
+        <script type="text/javascript">
+
+            var m = L.map('m').setView([55.67, 12.55], 5); 
+            L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(m);
+
+            // Question: Is there another way to get the geojson markers? 
+           // L.geoJson function is used to parse geojson file and load on to map 
+            var layer = L.geoJson();
+            m.addLayer(layer);
+            $.getJSON("{% url 'gdata' %}", function (data) {
+                layer.addData(data);
+                m.fitBounds(layer.getBounds());
+            });
+
+        </script>
+
+    </body>
+</html>
+
+           // Semi working one
+
+            // function forEachFeature(feature, layer) {
+            
+            //         var popupContent = "<p>The earthquake took place in <b>" +
+            //                 feature.properties.country + "</b> and its magnitude was " +
+            //                 feature.properties.magnitude + "</br>" ;
+                                    
+            //         if (feature.properties && feature.properties.popupContent) {
+            //             popupContent += feature.properties.popupContent;
+            //         }
+            //             layer.bindPopup(popupContent);
+            // };
+
+            // $.getJSON("{% url 'gdata' %}", function (gdata){
+            //     // add GeoJSON layer to the map 
+            //     L.geoJson( gdata, {
+            //         onEachFeature: forEachFeature
+            //     }).addTo(m)
+            // });
+
+            
+
+            // CIRCLE MARKERS
+
+            // var  geojsonMarkerOptions = {
+            //     'radius':6,
+            //     'opacity': .5,
+            //     'color': "red",
+            //     'fillColor':  "blue",
+            //     'fillOpacity': 0.8
+            // };
+
+            // var circle = new L.geoJSON(null, {
+            //     onEachFeature: forEachFeature,
+            //     pointToLayer: function (feature, latlng) {
+            //         return L.circleMarker(latlng, geojsonMarkerOptions);
+            //     }
+            // });
+            // // Get GeoJSON data and create features.
+            // $.getJSON("{% url 'gdata' %}", function (gdata) {
+            //         circle.addData(gdata);
+            // });
+            
+            // circle.addTo(m);
+
+            // GEOJSONFEATURE tag issue: worth looking - This ine is connected to views.py 
+            // var uv_data = {{ uv|geojsonfeature|safe }};
+            // function uvs(map,options){
+            //     new L.geoJson(uv_data).addTo(map);
+            // }
+            
+------  e.lat_lng ------
+<html>
+    <head>
+        <link rel="stylesheet" href="//unpkg.com/leaflet/dist/leaflet.css"/>
+        <script src="//unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    </head>
+    <body><h1>Hurra!</h1>
+        {{ markers|json_script:"markers-data" }}
+        <div id="m" style="width: 1920px; height: 1080px;"></div>
+
+        <script type="text/javascript">
+
+            var m = L.map('m').setView([55.67, 12.55], 5); 
+            L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(m);
+                    
+            {% for e in object_list  %}
+                L.marker({{ e.lat_lng }}).addTo(map);
+            {% endfor %}
+
+        </script>
+
+    </body>
+</html>
+
+---- Popup ----
+
+  <html>
+    <head>
+        <link rel="stylesheet" href="//unpkg.com/leaflet/dist/leaflet.css"/>
+        <script src="//unpkg.com/leaflet/dist/leaflet.js"></script>
+        <!-- This jquery library is importnat. With this you can do the below "getJSON" jQuery  -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    </head>
+    <body><h1>Hurra!</h1>
+        {{ markers|json_script:"markers-data" }}
+        <div id="m" style="width: 1920px; height: 1080px;"></div>
+
+        <script type="text/javascript">
+
+            var m = L.map('m').setView([55.67, 12.55], 3); 
+            L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(m);
+
+            // Question: Is there another way to get the geojson markers? 
+            // L.geoJson function is used to parse geojson file and load on to map 
+            // jQuery.getJSON(): Load the external geojson. This is a bit hard to understand now.
+            // Reference: https://django-geojson.readthedocs.io/en/latest/views.html 
+
+            //'Country:' + feature.properties.country 
+            $.getJSON("{% url 'gdata' %}", function (gdata){
+                // add GeoJSON layer to the map 
+                L.geoJson( gdata, {
+                    onEachFeature: function(feature, layer) {
+                        layer.bindPopup(feature.properties.popupContent);
+                    }
+                }).addTo(m)
+            });
+
+            //var layer = L.geoJson();
+
+            //m.addLayer(layer);
+            
+            // jQuery.getJSON("{% url 'gdata' %}", function (gdata) {
+
+            //     layer.addData(gdata);
+
+            //     m.fitBounds(layer.getBounds());
+
+            //     // Add popups. 
+            //     layer.bindPopup("pop" + feature.properties.country);
+
+            // });
+
+
+        </script>
+
+    </body>
+</html>

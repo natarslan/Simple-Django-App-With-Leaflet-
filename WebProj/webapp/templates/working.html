@@ -1,0 +1,38 @@
+
+// Question: Is there another way to get the geojson markers? 
+// L.geoJson function is used to parse geojson file and load on to map 
+// jQuery.getJSON(): Load the external geojson. This is a bit hard to understand now.
+// Observe: You are using 'gdata' defined in urls.py
+// Reference: https://django-geojson.readthedocs.io/en/latest/views.html 
+
+// $.getJSON(ourdata, function(data){
+//             L.geoJson(gdata,{
+//                 pointToLayer: function(feature,latlng){
+//                     return L.marker(latlng);
+//                 },
+//                 onEachFeature: function (feature, layer) {
+//                     layer.bindPopup(feature.properties.place + '<br/>' + feature.properties.location);
+//                 }
+//             }).addTo(m);
+//         });
+
+// Semi working one
+
+// function forEachFeature(feature, layer) {
+
+//         var popupContent = "<p>The earthquake took place in <b>" +
+//                 feature.properties.country + "</b> and its magnitude was " +
+//                 feature.properties.magnitude + "</br>" ;
+                        
+//         if (feature.properties && feature.properties.popupContent) {
+//             popupContent += feature.properties.popupContent;
+//         }
+//             layer.bindPopup(popupContent);
+// };
+
+// $.getJSON("{% url 'gdata' %}", function (gdata){
+//     // add GeoJSON layer to the map 
+//     L.geoJson( gdata, {
+//         onEachFeature: forEachFeature
+//     }).addTo(m)
+// });
