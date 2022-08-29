@@ -1,1 +1,1 @@
-# Simple-Django-App-With-Leaflet-
+# Simple Django App With Leaflet
