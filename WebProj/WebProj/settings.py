@@ -92,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'earthquake',
-        'USER': 'postgres',
-        'PASSWORD': '3141',
+        'USER': 'MY_USERNAME',
+        'PASSWORD': 'MY_PASSWORD',
         'HOST': 'localhost', 
         'PORT': 5433,
     }
