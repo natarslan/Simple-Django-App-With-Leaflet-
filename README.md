@@ -12,5 +12,5 @@ In this [jupyter notebook](https://github.com/natarslan/Simple-Django-App-With-L
 - Adding popup on the markers
 - Change the style of map marker
   - Change icon style to circle
-	- Display the circle size dependent on earthquake magnitude
+  - Display the circle size dependent on earthquake magnitude
 
