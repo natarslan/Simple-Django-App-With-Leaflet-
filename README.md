@@ -9,6 +9,7 @@ In this [jupyter notebook](https://github.com/natarslan/Simple-Django-App-With-L
 - Creating a Django web app
 - Uploading an excel file to the server
 - Displaying this data on a map
+- Adding popup on the markers
 - Change the style of map marker
   - Change icon style to circle
 	- Display the circle size dependent on earthquake magnitude
